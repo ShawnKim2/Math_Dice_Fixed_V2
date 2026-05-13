@@ -1,0 +1,176 @@
+﻿<Window x:Class="Math_Dice_Fixed_V2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Math_Dice_Fixed_V2.ViewModels"
+        Title="Math Dice Game"
+        Height="700"
+        Width="1000"
+        Background="#0b1020">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="#151a2e"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+
+        <Style x:Key="MainButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#3b82f6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2563eb"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1e40af"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Text="🎲 Math Dice Game Dashboard"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   Margin="0,0,0,16"/>
+
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Style="{StaticResource Card}"
+                Width="600"
+                Margin="0,0,12,12">
+            <StackPanel>
+                <TextBlock Text="Target" Foreground="White" FontSize="20"/>
+                <TextBlock Text="{Binding TargetText}"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#22ffcc"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource Card}"
+                Margin="0,0,12,20">
+            <StackPanel>
+                <TextBlock Text="Game Status"
+                           Foreground="White"
+                           FontSize="18"/>
+
+                <TextBlock Text="{Binding StatusText}"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="{Binding StatusBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2"
+                Grid.Column="0"
+                Style="{StaticResource Card}"
+                Width="600"
+                Margin="0,0,12,12">
+            <StackPanel>
+                <TextBlock Text="Dice" Foreground="White" FontSize="20"/>
+                <TextBlock Text="{Binding DiceText}"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2"
+                Grid.Column="1"
+                Grid.RowSpan="2"
+                Margin="0,0,12,0"
+                Style="{StaticResource Card}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock Text="{Binding LogText}"
+                           Foreground="White"
+                           FontSize="14"
+                           TextWrapping="Wrap"/>
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Text="주어진 Dice 숫자를 조합(+,-,*,/)하여 Target을 만들어보세요."
+                   Foreground="White"
+                   FontSize="16"
+                   Margin="0,0,0,10"
+                   VerticalAlignment="Top"/>
+
+        <Border Grid.Row="3"
+                Grid.Column="0"
+                Style="{StaticResource Card}"
+                Margin="0,30,20,0">
+            <StackPanel>
+                <TextBlock Text="Expression"
+                           Foreground="White"
+                           FontSize="20"/>
+
+                <TextBox Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="35"
+                         Margin="0,5,0,5"/>
+
+                <TextBlock Text="{Binding ValidationText}"
+                           Foreground="{Binding ValidationBrush}"
+                           FontSize="25"
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="제출"
+                            Style="{StaticResource MainButton}"
+                            Width="100"
+                            Command="{Binding SubmitCommand}"/>
+
+                    <Button Content="다시 시작"
+                            Style="{StaticResource MainButton}"
+                            Width="120"
+                            Command="{Binding RestartCommand}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
